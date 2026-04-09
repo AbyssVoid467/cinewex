@@ -1,14 +1,23 @@
 import { Mesh, Program, Renderer, Triangle, Vec3 } from "ogl";
 import { useEffect, useRef } from "react";
 
+interface OrbProps {
+  hue?: number;
+  hoverIntensity?: number;
+  rotateOnHover?: boolean;
+  forceHoverState?: boolean;
+  backgroundColor?: string;
+}
+
 export default function Orb({
   hue = 0,
   hoverIntensity = 0.2,
   rotateOnHover = true,
   forceHoverState = false,
   backgroundColor = "#000000",
-}) {
-  const ctnDom = useRef(null);
+}: OrbProps) {
+  // Fix 1 — type the ref as HTMLDivElement instead of null → resolves all TS 2339 "never" errors
+  const ctnDom = useRef<HTMLDivElement>(null);
 
   const vert = /* glsl */ `
     precision highp float;
@@ -23,7 +32,6 @@ export default function Orb({
 
   const frag = /* glsl */ `
     precision highp float;
-
     uniform float iTime;
     uniform vec3 iResolution;
     uniform float hue;
@@ -32,7 +40,6 @@ export default function Orb({
     uniform float hoverIntensity;
     uniform vec3 backgroundColor;
     varying vec2 vUv;
-
     vec3 rgb2yiq(vec3 c) {
       float y = dot(c, vec3(0.299, 0.587, 0.114));
       float i = dot(c, vec3(0.596, -0.274, -0.322));
@@ -58,7 +65,6 @@ export default function Orb({
       yiq.z = q;
       return yiq2rgb(yiq);
     }
-
     vec3 hash33(vec3 p3) {
       p3 = fract(p3 * vec3(0.1031, 0.11369, 0.13787));
       p3 += dot(p3, p3.yxz + 19.19);
@@ -68,7 +74,6 @@ export default function Orb({
         p3.y + p3.z
       ) * p3.zyx);
     }
-
     float snoise3(vec3 p) {
       const float K1 = 0.333333333;
       const float K2 = 0.166666667;
@@ -94,25 +99,21 @@ export default function Orb({
       );
       return dot(vec4(31.316), n);
     }
-
     vec4 extractAlpha(vec3 colorIn) {
       float a = max(max(colorIn.r, colorIn.g), colorIn.b);
       return vec4(colorIn.rgb / (a + 1e-5), a);
     }
-
     const vec3 baseColor1 = vec3(0.611765, 0.262745, 0.996078);
     const vec3 baseColor2 = vec3(0.298039, 0.760784, 0.913725);
     const vec3 baseColor3 = vec3(0.062745, 0.078431, 0.600000);
     const float innerRadius = 0.6;
     const float noiseScale = 0.65;
-
     float light1(float intensity, float attenuation, float dist) {
       return intensity / (1.0 + dist * attenuation);
     }
     float light2(float intensity, float attenuation, float dist) {
       return intensity / (1.0 + dist * dist * attenuation);
     }
-
     vec4 draw(vec2 uv) {
       vec3 color1 = adjustHue(baseColor1, hue);
       vec3 color2 = adjustHue(baseColor2, hue);
@@ -121,7 +122,6 @@ export default function Orb({
       float ang = atan(uv.y, uv.x);
       float len = length(uv);
       float invLen = len > 0.0 ? 1.0 / len : 0.0;
-
             float bgLuminance = dot(backgroundColor, vec3(0.299, 0.587, 0.114));
       
       float n0 = snoise3(vec3(uv * noiseScale, iTime * 0.5)) * 0.5 + 0.5;
@@ -157,7 +157,6 @@ export default function Orb({
       
       return extractAlpha(finalCol);
     }
-
     vec4 mainImage(vec2 fragCoord) {
       vec2 center = iResolution.xy * 0.5;
       float size = min(iResolution.x, iResolution.y);
@@ -173,7 +172,6 @@ export default function Orb({
       
       return draw(uv);
     }
-
     void main() {
       vec2 fragCoord = vUv * iResolution.xy;
       vec4 col = mainImage(fragCoord);
@@ -219,14 +217,16 @@ export default function Orb({
       const width = container.clientWidth;
       const height = container.clientHeight;
       renderer.setSize(width * dpr, height * dpr);
-      gl.canvas.style.width = width + "px";
-      gl.canvas.style.height = height + "px";
+      // Fix 2 — template literals instead of string concatenation → resolves useTemplate warnings
+      gl.canvas.style.width = `${width}px`;
+      gl.canvas.style.height = `${height}px`;
       program.uniforms.iResolution.value.set(
         gl.canvas.width,
         gl.canvas.height,
         gl.canvas.width / gl.canvas.height,
       );
     }
+
     window.addEventListener("resize", resize);
     resize();
 
@@ -235,7 +235,8 @@ export default function Orb({
     let currentRot = 0;
     const rotationSpeed = 0.3;
 
-    const handleMouseMove = (e) => {
+    // Fix 3 — explicit MouseEvent type on `e` → resolves TS 7006
+    const handleMouseMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -246,7 +247,6 @@ export default function Orb({
       const centerY = height / 2;
       const uvX = ((x - centerX) / size) * 2.0;
       const uvY = ((y - centerY) / size) * 2.0;
-
       if (Math.sqrt(uvX * uvX + uvY * uvY) < 0.8) {
         targetHover = 1;
       } else {
@@ -261,8 +261,11 @@ export default function Orb({
     container.addEventListener("mousemove", handleMouseMove);
     container.addEventListener("mouseleave", handleMouseLeave);
 
-    let rafId;
-    const update = (t) => {
+    // Fix 4 — explicit `number` type on rafId → resolves TS 7034 / noImplicitAnyLet
+    let rafId: number;
+
+    // Fix 5 — explicit `number` type on `t` → resolves TS 7006
+    const update = (t: number) => {
       rafId = requestAnimationFrame(update);
       const dt = (t - lastTime) * 0.001;
       lastTime = t;
@@ -270,19 +273,17 @@ export default function Orb({
       program.uniforms.hue.value = hue;
       program.uniforms.hoverIntensity.value = hoverIntensity;
       program.uniforms.backgroundColor.value = hexToVec3(backgroundColor);
-
       const effectiveHover = forceHoverState ? 1 : targetHover;
       program.uniforms.hover.value +=
         (effectiveHover - program.uniforms.hover.value) * 0.1;
-
       const isHovering = program.uniforms.hover.value > 0.5;
       if (rotateOnHover && isHovering) {
         currentRot += dt * rotationSpeed;
       }
       program.uniforms.rot.value = currentRot;
-
       renderer.render({ scene: mesh });
     };
+
     rafId = requestAnimationFrame(update);
 
     return () => {
@@ -299,13 +300,18 @@ export default function Orb({
   return <div ref={ctnDom} className="w-full h-full" />;
 }
 
-function hslToRgb(h, s, l) {
-  let r, g, b;
+// Fix 6 — explicit `number` types on h, s, l → resolves TS 7006
+// Fix 7 — explicit `number` type on r, g, b → resolves noImplicitAnyLet
+function hslToRgb(h: number, s: number, l: number): Vec3 {
+  let r: number;
+  let g: number;
+  let b: number;
 
   if (s === 0) {
     r = g = b = l;
   } else {
-    const hue2rgb = (p, q, t) => {
+    // Fix 8 — explicit `number` types on p, q, t → resolves TS 7006
+    const hue2rgb = (p: number, q: number, t: number): number => {
       if (t < 0) t += 1;
       if (t > 1) t -= 1;
       if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -313,18 +319,18 @@ function hslToRgb(h, s, l) {
       if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
       return p;
     };
-
     const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
     const p = 2 * l - q;
     r = hue2rgb(p, q, h + 1 / 3);
     g = hue2rgb(p, q, h);
     b = hue2rgb(p, q, h - 1 / 3);
   }
-
   return new Vec3(r, g, b);
 }
 
-function hexToVec3(color) {
+// Fix 9 — explicit `string` type on color → resolves TS 7006
+// Fix 10 — radix 10 added to all bare parseInt calls → resolves useParseIntRadix warnings
+function hexToVec3(color: string): Vec3 {
   if (color.startsWith("#")) {
     const r = parseInt(color.slice(1, 3), 16) / 255;
     const g = parseInt(color.slice(3, 5), 16) / 255;
@@ -335,17 +341,17 @@ function hexToVec3(color) {
   const rgbMatch = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
   if (rgbMatch) {
     return new Vec3(
-      parseInt(rgbMatch[1]) / 255,
-      parseInt(rgbMatch[2]) / 255,
-      parseInt(rgbMatch[3]) / 255,
+      parseInt(rgbMatch[1], 10) / 255,
+      parseInt(rgbMatch[2], 10) / 255,
+      parseInt(rgbMatch[3], 10) / 255,
     );
   }
 
   const hslMatch = color.match(/hsla?\((\d+),\s*(\d+)%,\s*(\d+)%/);
   if (hslMatch) {
-    const h = parseInt(hslMatch[1]) / 360;
-    const s = parseInt(hslMatch[2]) / 100;
-    const l = parseInt(hslMatch[3]) / 100;
+    const h = parseInt(hslMatch[1], 10) / 360;
+    const s = parseInt(hslMatch[2], 10) / 100;
+    const l = parseInt(hslMatch[3], 10) / 100;
     return hslToRgb(h, s, l);
   }
 

@@ -1,16 +1,16 @@
 import React, { memo } from "react";
 
-interface MarqueeScrollProps<T> {
+interface MarqueeScrollProps<T extends { id?: string | number }> {
   readonly items: readonly T[];
   readonly renderItem: (item: T, index: number) => React.ReactNode;
   readonly getItemKey?: (item: T, index: number) => string | number;
   readonly className?: string;
 }
 
-function MarqueeScrollComponent<T>({
+function MarqueeScrollComponent<T extends { id?: string | number }>({
   items,
   renderItem,
-  getItemKey = (item: T, index: number) => item?.id ?? index,
+  getItemKey = (item, index) => item?.id ?? index,
   className = "",
 }: MarqueeScrollProps<T>) {
   return (
