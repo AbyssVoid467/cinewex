@@ -7,7 +7,7 @@ interface FuzzyTextProps {
   fontFamily?: string;
   color?: string;
   enableHover?: boolean;
-  baseIntensity?: number;
+  baseIntensity: number;
   hoverIntensity?: number;
   fuzzRange?: number;
   fps?: number;
@@ -22,18 +22,24 @@ interface FuzzyTextProps {
   className?: string;
 }
 
+/**
+ * Safely extracts text from ReactNodes using recursive type narrowing.
+ * Resolves TS2339 by providing a generic to isValidElement.
+ */
 const extractTextContent = (children: React.ReactNode): string => {
   if (typeof children === "string") return children;
   if (typeof children === "number") return children.toString();
+
   if (Array.isArray(children)) {
-    return children.map(extractTextContent).join(" ");
+    return children.map(extractTextContent).join("");
   }
-  if (
-    React.isValidElement(children) &&
-    children.props?.children !== undefined
-  ) {
-    return extractTextContent(children.props.children);
+
+  // Use generic to tell TS that props contains children
+  // Use optional chaining to satisfy Biome linting
+  if (React.isValidElement<{ children?: React.ReactNode }>(children)) {
+    return extractTextContent(children.props?.children);
   }
+
   return "";
 };
 
