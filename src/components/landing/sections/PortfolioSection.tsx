@@ -53,7 +53,7 @@ export const PortfolioSection = memo(() => {
             Portfolio Exhibition
           </span>
           <h2 className="font-headline text-7xl md:text-9xl font-bold tracking-tighter text-white uppercase mix-blend-difference">
-            OUR DIRECTORS' CUT
+            OUR SERVICES
           </h2>
         </div>
 

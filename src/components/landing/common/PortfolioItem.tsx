@@ -34,8 +34,8 @@ export const PortfolioItem = memo<PortfolioItemProps>(
         onMouseLeave={handleMouseLeave}
       >
         <div className="flex items-center justify-between">
-          <h3 className="font-headline text-4xl md:text-6xl font-bold text-white transition-all duration-500 group-hover:translate-x-4">
-            {item.title} — {item.category}
+          <h3 className="font-headline text-4xl md:text-6xl font-bold text-white transition-all duration-500 group-hover:translate-x-4 uppercase">
+            {item.title}
           </h3>
           <ArrowUpRight className="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>

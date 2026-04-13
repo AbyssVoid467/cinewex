@@ -1,7 +1,6 @@
 export interface PortfolioItem {
   readonly id: string;
   readonly title: string;
-  readonly category: string;
   readonly backgroundId: BackgroundId;
   readonly hoverColor: "cyan" | "purple";
   readonly imagePath: string;
