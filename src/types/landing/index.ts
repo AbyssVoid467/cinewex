@@ -63,3 +63,10 @@ export interface ButtonProps {
   readonly className?: string;
   readonly ariaLabel?: string;
 }
+
+// NEW: ToolBrand interface for ToolsUsedSection
+export interface ToolBrand {
+  readonly id: string;
+  readonly name: string;
+  readonly imagePath: string;
+}

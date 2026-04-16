@@ -2,7 +2,6 @@
 
 import type React from "react";
 import { lazy, Suspense, useRef } from "react";
-import { Footer } from "./common/Footer";
 import { Navigation } from "./common/Navigation";
 import HeadlineSection from "./sections/HeadlineSection";
 import { HeroSection } from "./sections/HeroSection";
@@ -27,8 +26,8 @@ const WorkflowSection = lazy(() =>
 );
 
 const TestimonialsSection = lazy(() =>
-  import("./sections/TestimonialsSection").then((m) => ({
-    default: m.TestimonialsSection,
+  import("./sections/ToolsUsedSection").then((m) => ({
+    default: m.ToolsUsedSection,
   })),
 );
 
