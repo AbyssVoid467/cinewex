@@ -1,4 +1,3 @@
-import { Button } from "@base-ui/react";
 import { ChevronsDown } from "lucide-react";
 import Link from "next/link";
 import { memo } from "react";
@@ -7,7 +6,7 @@ import Orb from "@/components/ui/Orb";
 export const HeroSection = memo(() => {
   return (
     // Added overflow-x-hidden to prevent horizontal scrolling on narrow viewports
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden overflow-x-hidden pt-20 snap-start">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden overflow-x-hidden pt-20">
       <div className="absolute inset-0 pointer-events-auto">
         <Orb
           hoverIntensity={0.42}
@@ -20,12 +19,12 @@ export const HeroSection = memo(() => {
 
       <div className="relative z-10 text-center px-4 max-w-6xl animate-reveal pointer-events-none">
         <span className="font-bold text-cyan-400 tracking-[0.2em] uppercase text-[10px] mb-8 block">
-          Full Service Creative Agency
+          AI-Powered Creative Studio for Brands
         </span>
         {/* Mobile: text-4xl with relaxed leading; Desktop: preserved md:text-8xl with tight leading */}
-        <h1 className="font-headline text-4xl md:text-8xl font-bold leading-tight md:leading-[0.9] tracking-tighter mb-12 text-white uppercase">
-          CINEMATIC AD FILMS <br /> AT{" "}
-          <span className="text-gradient">UNPRECEDENTED SPEED</span>
+        <h1 className="font-headline text-4xl md:text-7xl font-bold leading-tight md:leading-[0.9] tracking-tighter mb-12 text-white uppercase">
+          CINEMATIC AI AD FILMS <br /> BUILT FOR{" "}
+          <span className="text-gradient">BRANDS THAT MOVE FAST</span>
         </h1>
         <div className="flex flex-col md:flex-row gap-4 justify-center items-center pointer-events-auto">
           <Link
@@ -35,12 +34,12 @@ export const HeroSection = memo(() => {
           >
             Start Your Campaign
           </Link>
-          <Button
-            // Mobile: w-full max-w-xs ensures uniform button widths; Desktop: md:w-auto restores natural width
+          <Link
+            href="https://www.instagram.com/cinewexofficial/"
             className="glass-panel text-white hover:bg-white/10 px-12 py-5 font-headline font-bold uppercase tracking-widest text-xs transition-all w-full max-w-xs md:w-auto"
           >
             View Our Reel
-          </Button>
+          </Link>
         </div>
       </div>
 

@@ -8,17 +8,18 @@ const ADVANTAGE_FEATURES = [
   {
     id: "iterations",
     title: "Infinite Iterations",
-    description: "Explore a thousand styles in seconds.",
+    description: "Test a hundred visual styles for your brand in a single day.",
   },
   {
     id: "location",
     title: "Zero Location Fees",
-    description: "From Mars to Metropolis, no travel needed.",
+    description:
+      "From Tokyo streets to Martian deserts - no travel, no permits.",
   },
   {
     id: "delivery",
     title: "Delivery in Days",
-    description: "Collapse month-long schedules into 72 hours.",
+    description: "Compress full production timelines into 72 hours.",
   },
 ] as const;
 
@@ -60,27 +61,24 @@ export const RealitySliderSection = memo(() => {
     }
   };
 
-  // Dynamic opacity calculations based on slider position
-  // When slider is at 50%, both sides are at 50% opacity on mobile
-  // When slider moves left (position < 50), modern side fades out
-  // When slider moves right (position > 50), legacy side fades out
+  // FIXED: Dynamic opacity calculations based on slider position
   const modernOpacity = useMemo(() => {
-    // Normalize position: 0 = fully visible, 1 = fully hidden when dragged left
-    const fadeStart = 40; // Start fading when position is less than 40%
-    if (position >= fadeStart) return 1;
-    return Math.max(0.2, position / fadeStart);
+    // Fully opaque from 0 to 60. Fades to 0.2 as position goes 60 -> 100.
+    if (position <= 60) return 1;
+    const fadeProgress = (position - 60) / 40; // 0 at 60, 1 at 100
+    return Math.max(0.2, 1 - fadeProgress * 0.8);
   }, [position]);
 
   const legacyOpacity = useMemo(() => {
-    // Normalize position: 100 = fully visible, 60 = start fading
-    const fadeStart = 60; // Start fading when position is greater than 60%
-    if (position <= fadeStart) return 1;
-    return Math.max(0.2, (100 - position) / (100 - fadeStart));
+    // Fully opaque from 40 to 100. Fades to 0.2 as position goes 40 -> 0.
+    if (position >= 40) return 1;
+    const fadeProgress = (40 - position) / 40; // 0 at 40, 1 at 0
+    return Math.max(0.2, 1 - fadeProgress * 0.8);
   }, [position]);
 
   return (
     <section
-      className="h-screen bg-black overflow-hidden flex flex-col snap-start relative"
+      className="h-screen bg-black overflow-hidden flex flex-col relative"
       id="advantage"
     >
       <div
@@ -133,7 +131,7 @@ export const RealitySliderSection = memo(() => {
                 The Cinewex Way
               </span>
               <h3 className="font-headline text-2xl sm:text-3xl md:text-5xl font-bold text-white uppercase italic leading-tight">
-                Hyper-Efficiency
+                AI-Powered Efficiency
               </h3>
             </div>
 
@@ -184,7 +182,7 @@ export const RealitySliderSection = memo(() => {
                 Legacy Production
               </span>
               <h3 className="font-headline text-2xl sm:text-3xl md:text-5xl font-bold text-white leading-none">
-                Friction-Heavy
+                Slow & Expensive
               </h3>
             </div>
 

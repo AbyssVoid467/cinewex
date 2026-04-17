@@ -1,12 +1,11 @@
 import Link from "next/link";
 import { memo } from "react";
 import { AmbientOrb } from "../common/AmbientOrb";
-import { Footer } from "../common/Footer";
 
 export const CTASection = memo(() => {
   return (
-    <section className="relative snap-start min-h-screen flex flex-col overflow-hidden">
-      {/* Background Ambient Effects */}
+    // Removed Footer from here ↓
+    <section className="relative min-h-screen flex flex-col overflow-hidden">
       <AmbientOrb
         position="center"
         color="cyan"
@@ -20,7 +19,6 @@ export const CTASection = memo(() => {
         className="right-1/4"
       />
 
-      {/* CTA Content - Flex grow to center itself in available space */}
       <div className="relative z-10 flex-1 flex flex-col justify-center px-8 py-60">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="font-headline text-6xl md:text-9xl font-bold tracking-tighter text-white mb-16 leading-none uppercase">
@@ -36,13 +34,11 @@ export const CTASection = memo(() => {
             </Link>
           </div>
           <p className="mt-10 font-bold text-[10px] text-zinc-500 tracking-[0.3em] uppercase">
-            Accepting new brand partnerships for Q1 2025
+            Accepting new brand partnerships for 2026
           </p>
         </div>
       </div>
-
-      {/* Footer sits naturally at bottom, no forced full-height */}
-      <Footer />
+      {/* Footer removed — now rendered in index.tsx */}
     </section>
   );
 });

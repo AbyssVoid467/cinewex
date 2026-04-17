@@ -28,13 +28,18 @@ export const WorkflowSection = memo(
       <div
         ref={sectionRef}
         id="workflow"
-        className="relative h-[400vh] bg-[#0A0A0C] overflow-visible snap-start"
+        className="relative h-[600vh] bg-[#0A0A0C] overflow-visible"
       >
         <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-3 py-4 sm:px-5 sm:py-6 lg:p-8 overflow-hidden">
-          {/* Background orb — unchanged */}
+          {/* Background orb — reacts to activeStep via orbConfig */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div
-              className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${orbConfig.width} ${orbConfig.height} ${orbConfig.color} ${orbConfig.blur} rounded-full transition-all duration-1000`}
+              className={`
+                absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                rounded-full transition-all duration-1000
+                ${orbConfig.width} ${orbConfig.height}
+                ${orbConfig.color} ${orbConfig.blur}
+              `}
             />
           </div>
 
@@ -49,13 +54,10 @@ export const WorkflowSection = memo(
           </div>
 
           {/*
-           * Card container — the critical fix.
-           *
-           * Desktop:  aspect-video (16/9) — cinematic, same as before.
-           * Tablet:   aspect-[3/2]        — slightly taller, step 1 stacked layout fits.
-           * Mobile:   aspect-[4/3]        — tall enough for all three states to breathe.
-           *
-           * We also guard with a min-height so very short landscape phones still work.
+           * Card container — aspect ratios unchanged.
+           * Desktop:  aspect-video (16/9)
+           * Tablet:   aspect-[3/2]
+           * Mobile:   aspect-[4/3]  + min-h-70 safety floor
            */}
           <BorderGlow
             edgeSensitivity={30}

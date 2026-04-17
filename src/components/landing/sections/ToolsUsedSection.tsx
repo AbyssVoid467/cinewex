@@ -23,14 +23,14 @@ export const ToolsUsedSection = memo(() => {
   );
 
   return (
-    <section className="min-h-[60vh] py-24 bg-zinc-950/50 overflow-hidden border-y border-white/5 snap-start flex flex-col items-center justify-center">
+    <section className="min-h-[60vh] py-24 bg-zinc-950/50 overflow-hidden border-y border-white/5 flex flex-col items-center justify-center">
       <div className="max-w-7xl mx-auto px-8 w-full">
         <div className="text-center mb-16">
           <p className="font-bold text-[10px] tracking-[0.3em] text-cyan-400 uppercase mb-4">
             Our Stack
           </p>
           <h2 className="font-headline text-3xl md:text-4xl font-light text-white tracking-tight">
-            Powered by industry-leading tools
+            Powered by the best AI and post-production tools in the industry
           </h2>
         </div>
       </div>

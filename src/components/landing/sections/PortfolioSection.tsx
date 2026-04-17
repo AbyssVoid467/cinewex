@@ -12,8 +12,9 @@ const PortfolioBackground = memo<{
   readonly backgroundColor: string;
 }>(({ id, isVisible, imagePath, backgroundColor }) => (
   <div
-    className={`portfolio-bg absolute inset-0 transition-opacity duration-600 ${isVisible ? "opacity-100" : "opacity-0"
-      }`}
+    className={`portfolio-bg absolute inset-0 transition-opacity duration-600 ${
+      isVisible ? "opacity-100" : "opacity-0"
+    }`}
     style={{ backgroundColor }}
   >
     <Image
@@ -33,7 +34,7 @@ export const PortfolioSection = memo(() => {
 
   return (
     <section
-      className="relative min-h-[100dvh] h-auto md:h-screen md:min-h-screen flex items-center overflow-hidden py-16 md:py-32 snap-start"
+      className="relative min-h-dvh h-auto md:h-screen md:min-h-screen flex items-center overflow-hidden py-16 md:py-32"
       id="portfolio"
     >
       <div className="absolute inset-0 z-0">
