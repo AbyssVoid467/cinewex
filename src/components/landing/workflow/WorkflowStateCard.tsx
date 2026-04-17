@@ -173,13 +173,6 @@ export const WorkflowStateCard = memo<WorkflowStateCardProps>(
             <p className="text-cyan-400 font-mono text-[10px] sm:text-xs tracking-widest uppercase">
               {step.tagline}
             </p>
-            <Button
-              variant="primary"
-              size="sm"
-              className="mt-4 sm:mt-6 lg:mt-8 rounded-full text-xs sm:text-sm"
-            >
-              Download Assets
-            </Button>
           </div>
         </div>
       </div>
