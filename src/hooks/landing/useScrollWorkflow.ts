@@ -38,16 +38,18 @@ export const useScrollWorkflow = (
     const isWindow = container === window;
 
     const handleScroll = throttle((): void => {
+      if (!sectionRef.current) return;
+
       const scrollPercent = calculateScrollPercentage(
         sectionRef.current,
         container,
       );
 
-      if (scrollPercent < 0 || scrollPercent > 1) return;
-
       const step = calculateActiveStep(scrollPercent);
       setActiveStep(step);
     }, 16);
+
+    handleScroll();
 
     if (isWindow) {
       window.addEventListener("scroll", handleScroll, { passive: true });

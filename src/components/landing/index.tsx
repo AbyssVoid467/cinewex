@@ -5,6 +5,7 @@ import { lazy, Suspense, useRef } from "react";
 import { Navigation } from "./common/Navigation";
 import HeadlineSection from "./sections/HeadlineSection";
 import { HeroSection } from "./sections/HeroSection";
+import { Footer } from "./common/Footer";
 
 // Lazy load below-the-fold sections
 const RealitySliderSection = lazy(() =>
@@ -47,13 +48,9 @@ const CinewexLanding: React.FC = () => {
   const mainRef = useRef<HTMLElement>(null);
 
   return (
-    <div className="selection:bg-primary-container selection:text-on-primary-container overflow-x-clip flex flex-col h-screen">
+    <div className="selection:bg-primary-container selection:text-on-primary-container flex flex-col h-screen">
       <Navigation />
-
-      <main
-        ref={mainRef}
-        className="flex-1 overflow-y-auto snap-y snap-mandatory"
-      >
+      <main ref={mainRef} className="flex-1 overflow-y-auto overflow-x-hidden">
         <HeroSection />
         <Suspense fallback={<LoadingFallback />}>
           <HeadlineSection />
@@ -62,6 +59,7 @@ const CinewexLanding: React.FC = () => {
           <WorkflowSection containerRef={mainRef} />
           <TestimonialsSection />
           <CTASection />
+          <Footer /> {/* ← Moved OUTSIDE CTASection, direct child of main */}
         </Suspense>
       </main>
     </div>

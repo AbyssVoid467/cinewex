@@ -16,19 +16,29 @@ export const calculateScrollPercentage = (
 
   const elementRect = element.getBoundingClientRect();
 
-  const containerTop = isWindow
-    ? 0
-    : (scrollContainer as HTMLElement).getBoundingClientRect().top;
+  if (isWindow) {
+    // Window-based scroll: simple case
+    const elementOffsetInDocument = elementRect.top + window.scrollY;
+    const scrollable = element.offsetHeight - containerHeight;
 
-  // Position of the element's top edge in the container's scroll coordinate space
-  const elementOffsetInContainer = elementRect.top - containerTop + scrollY;
+    if (scrollable <= 0) return 0;
 
-  const scrollable = element.offsetHeight - containerHeight;
-  if (scrollable <= 0) return 0;
+    const scrollPercent = (scrollY - elementOffsetInDocument) / scrollable;
+    return Math.max(0, Math.min(1, scrollPercent));
+  } else {
+    // Container-based scroll: account for container position
+    const container = scrollContainer as HTMLElement;
+    const containerRect = container.getBoundingClientRect();
 
-  const scrollPercent = (scrollY - elementOffsetInContainer) / scrollable;
+    // Element's top edge relative to container's content (not viewport)
+    const elementTopInContainer = elementRect.top - containerRect.top + scrollY;
 
-  return Math.max(0, Math.min(1, scrollPercent));
+    const scrollable = element.offsetHeight - containerHeight;
+    if (scrollable <= 0) return 0;
+
+    const scrollPercent = (scrollY - elementTopInContainer) / scrollable;
+    return Math.max(0, Math.min(1, scrollPercent));
+  }
 };
 
 export const throttle = <T extends (...args: unknown[]) => void>(

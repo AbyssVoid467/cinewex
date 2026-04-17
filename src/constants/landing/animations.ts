@@ -1,6 +1,6 @@
 export const SCROLL_THRESHOLDS = {
-  STEP_1: 0.33,
-  STEP_2: 0.66,
+  STEP_1: 0.52,
+  STEP_2: 0.74,
 } as const;
 
 export const TRANSITION_DURATIONS = {

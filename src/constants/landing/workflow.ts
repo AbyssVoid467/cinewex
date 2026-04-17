@@ -17,16 +17,16 @@ export const WORKFLOW_STEPS: readonly WorkflowStep[] = [
     title: "Visual Sculpting",
     tagline: "Rendering Concepts...",
     description:
-      "Rapid-fire ideation. Sketches morph into high-fidelity storyboards in real-time. We explore infinite artistic parallel universes.",
+      " From mood boards to high-fidelity storyboards in real time. We explore multiple creative directions in parallel - you pick the one that moves your brand.",
     imagePath: "/assets/storyboard.jpg",
     activeColor: "purple",
   },
   {
     id: 2,
     title: "Final Delivery",
-    tagline: "8K_HDR — 4:4:4 — RENDERED_GLOBAL_CLUSTER",
-    description: "Cinema-grade output ready for distribution.",
-    imagePath: "/assets/final-render.jpg",
+    tagline: "",
+    description: "",
+    imagePath: "",
     activeColor: "cyan",
   },
 ] as const;
